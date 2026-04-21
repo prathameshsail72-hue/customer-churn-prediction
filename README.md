@@ -95,11 +95,11 @@ cd customer-churn-prediction
 ## 🖥️ Application Preview
 
 ### 📌 User Interface
-<img src="assets\p1.png" width="700">
+<img src="assets/p1.png" width="700">
 
 ### 📊 Prediction Result
-<img src="assets\p2.png" width="700">
+<img src="assets/p2.png" width="700">
 
 ### 🎥 Demo Video
 Watch the demo here:  
-👉 https://github.com/prathameshsail72-hue/customer-churn-prediction/blob/main/assets/p3.mp4
+![Demo](assets/demo.gif)
