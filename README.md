@@ -91,6 +91,7 @@ customer-churn-prediction/
 ```bash
 git clone https://github.com/your-username/customer-churn-prediction.git
 cd customer-churn-prediction
+```
 
 ## 🖥️ Application Preview
 
@@ -101,5 +102,4 @@ cd customer-churn-prediction
 <img src="assets/p2.png" width="700">
 
 ### 🎥 Demo Video
-Watch the demo here:  
-![Demo](assets/demo.gif)
+👉 https://github.com/prathameshsail72-hue/customer-churn-prediction/blob/main/assets/p3.mp4
