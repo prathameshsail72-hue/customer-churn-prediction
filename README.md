@@ -30,6 +30,7 @@ Customer churn is a critical business problem in the telecom industry. Retaining
 ---
 
 ## 🏗️ Project Structure
+```
 customer-churn-prediction/
 │
 ├── app/
@@ -50,7 +51,7 @@ customer-churn-prediction/
 ├── requirements.txt
 ├── setup.py
 └── README.md
-
+```
 
 ---
 
