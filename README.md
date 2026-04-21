@@ -94,10 +94,10 @@ cd customer-churn-prediction
 ## 🖥️ Application Preview
 
 ### 📌 User Interface
-<img src="assets/p1.png" width="700">
+<img src="C:\Users\Rupali\OneDrive\Documents\ML_Projects\customer-churn-prediction\assets\p1.png" width="700">
 
 ### 📊 Prediction Result
-<img src="assets/p2.png" width="700">
+<img src="C:\Users\Rupali\OneDrive\Documents\ML_Projects\customer-churn-prediction\assets\p2.png" width="700">
 
 ### 🎥 Demo Video
 Watch the demo here:  
