@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-API_URL = "http://127.0.0.1:8000/predict"
+API_URL = "https://customer-churn-prediction-xkxz.onrender.com/predict"
 
 st.set_page_config(page_title="Churn Predictor", page_icon="📊")
 
@@ -45,3 +45,4 @@ if st.button("Predict"):
 
     except Exception as e:
         st.error(str(e))
+
