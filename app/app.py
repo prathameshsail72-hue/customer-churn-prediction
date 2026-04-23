@@ -16,33 +16,33 @@ internet = st.selectbox("Internet Service", ["DSL", "Fiber optic", "No"])
 
 if st.button("Predict"):
     payload = {
-        "tenure": tenure,
-        "MonthlyCharges": monthly,
-        "TotalCharges": total,
+        "tenure": int(tenure),
+        "MonthlyCharges": float(monthly),
+        "TotalCharges": float(total),
         "Contract": contract,
         "InternetService": internet
     }
 
+    #st.write("Sending payload:", payload)  # DEBUG
+
     try:
-        res = requests.post(API_URL, json=payload)
+        res = requests.post(API_URL, json=payload, timeout=15)
 
         if res.status_code == 200:
             data = res.json()
 
-            st.subheader("Result")
             st.success(f"Churn: {data['churn_prediction']}")
             st.write(f"Probability: {data['probability']}")
 
-            st.subheader("Reasons")
-            for r in data["reasons"]:
+            for r in data.get("reasons", []):
                 st.write(f"- {r}")
 
-            st.subheader("Recommended Action")
-            st.info(data["recommended_action"])
+            st.info(data.get("recommended_action", "N/A"))
 
         else:
             st.error(f"API Error: {res.status_code}")
+            st.write(res.text)  # IMPORTANT
 
     except Exception as e:
+        st.warning("⏳ Server might be waking up...")
         st.error(str(e))
-
