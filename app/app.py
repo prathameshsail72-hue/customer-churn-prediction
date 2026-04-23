@@ -1,102 +1,47 @@
 import streamlit as st
-from src.predict import predict
+import requests
 
-st.set_page_config(page_title="Customer Churn Prediction", layout="wide")
-st.title("Customer Churn Prediction App")
+API_URL = "http://127.0.0.1:8000/predict"
 
-st.subheader("Enter Customer Details")
+st.set_page_config(page_title="Churn Predictor", page_icon="📊")
 
-with st.form("form"):
-    col1, col2, col3 = st.columns(3)
+st.title("📊 Customer Churn Prediction")
 
-    # Column 1
-    with col1:
-        gender = st.selectbox("Gender", ["Female", "Male"])
-        senior = st.selectbox("Senior Citizen", [0, 1])
-        partner = st.selectbox("Partner", ["Yes", "No"])
-        dependents = st.selectbox("Dependents", ["Yes", "No"])
-        tenure = st.number_input("Tenure", 0, 100, 12)
-        phone_service = st.selectbox("Phone Service", ["Yes", "No"])
-        multiple_lines = st.selectbox(
-            "Multiple Lines", ["No", "Yes", "No phone service"]
-        )
+tenure = st.number_input("Tenure (months)", 0, 72)
+monthly = st.number_input("Monthly Charges", 0.0, 200.0)
+total = st.number_input("Total Charges", 0.0, 10000.0)
 
-    # Column 2
-    with col2:
-        internet_service = st.selectbox(
-            "Internet Service", ["DSL", "Fiber optic", "No"]
-        )
-        online_security = st.selectbox(
-            "Online Security", ["Yes", "No", "No internet service"]
-        )
-        online_backup = st.selectbox(
-            "Online Backup", ["Yes", "No", "No internet service"]
-        )
-        device_protection = st.selectbox(
-            "Device Protection", ["Yes", "No", "No internet service"]
-        )
-        tech_support = st.selectbox(
-            "Tech Support", ["Yes", "No", "No internet service"]
-        )
-        streaming_tv = st.selectbox(
-            "Streaming TV", ["Yes", "No", "No internet service"]
-        )
-        streaming_movies = st.selectbox(
-            "Streaming Movies", ["Yes", "No", "No internet service"]
-        )
+contract = st.selectbox("Contract Type", ["Month-to-month", "One year", "Two year"])
+internet = st.selectbox("Internet Service", ["DSL", "Fiber optic", "No"])
 
-    # Column 3
-    with col3:
-        contract = st.selectbox(
-            "Contract", ["Month-to-month", "One year", "Two year"]
-        )
-        paperless_billing = st.selectbox(
-            "Paperless Billing", ["Yes", "No"]
-        )
-        payment_method = st.selectbox(
-            "Payment Method",
-            [
-                "Electronic check",
-                "Mailed check",
-                "Bank transfer (automatic)",
-                "Credit card (automatic)",
-            ],
-        )
-        monthly = st.number_input("Monthly Charges", 0.0, 200.0, 70.0)
-        total = st.number_input("Total Charges", 0.0, 10000.0, 800.0)
-
-    submit = st.form_submit_button("Predict")
-
-# 🔮 Prediction
-if submit:
-    input_data = {
-        "gender": gender,
-        "SeniorCitizen": senior,
-        "Partner": partner,
-        "Dependents": dependents,
+if st.button("Predict"):
+    payload = {
         "tenure": tenure,
-        "PhoneService": phone_service,
-        "MultipleLines": multiple_lines,
-        "InternetService": internet_service,
-        "OnlineSecurity": online_security,
-        "OnlineBackup": online_backup,
-        "DeviceProtection": device_protection,
-        "TechSupport": tech_support,
-        "StreamingTV": streaming_tv,
-        "StreamingMovies": streaming_movies,
-        "Contract": contract,
-        "PaperlessBilling": paperless_billing,
-        "PaymentMethod": payment_method,
         "MonthlyCharges": monthly,
         "TotalCharges": total,
+        "Contract": contract,
+        "InternetService": internet
     }
 
-    pred, prob = predict(input_data)
+    try:
+        res = requests.post(API_URL, json=payload)
 
-    st.subheader("Prediction Result")
-    st.write(f"Churn Probability: {prob:.4f}")
+        if res.status_code == 200:
+            data = res.json()
 
-    if pred == 1:
-        st.error("Customer likely to churn")
-    else:
-        st.success("Customer likely to stay")
+            st.subheader("Result")
+            st.success(f"Churn: {data['churn_prediction']}")
+            st.write(f"Probability: {data['probability']}")
+
+            st.subheader("Reasons")
+            for r in data["reasons"]:
+                st.write(f"- {r}")
+
+            st.subheader("Recommended Action")
+            st.info(data["recommended_action"])
+
+        else:
+            st.error(f"API Error: {res.status_code}")
+
+    except Exception as e:
+        st.error(str(e))
